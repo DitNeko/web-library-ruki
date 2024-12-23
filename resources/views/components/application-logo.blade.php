@@ -1,0 +1,1 @@
+<img src="{{ asset('logo/open-book.png') }}" {{ $attributes }} alt="">
