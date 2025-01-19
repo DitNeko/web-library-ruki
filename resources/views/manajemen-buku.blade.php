@@ -64,9 +64,6 @@
                             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                             Tambah Buku Baru
                         </a>
-                        <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                            Import Buku
-                        </a>
                     </div>
 
                     {{-- Tabel Buku dengan DataTables --}}
@@ -75,7 +72,6 @@
                         <table id="booksTable" class="display responsive nowrap w-full">
                             <thead>
                                 <tr>
-                                    <th>No</th>
                                     <th>Judul</th>
                                     <th>Penulis</th>
                                     <th>Kategori</th>
@@ -86,7 +82,6 @@
                             <tbody>
                                 @foreach ($books as $index => $book)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $book->title }}</td>
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->category->name }}</td>

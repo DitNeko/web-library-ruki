@@ -18,7 +18,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Total Buku</p>
-                            <p class="text-2xl font-bold">{{ Number::abbreviate($loanActive) }}</p>
+                            <p class="text-2xl font-bold text-blue-500">{{ Number::abbreviate($books) }}</p>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Total Pengembalian</p>
-                            <p class="text-2xl font-bold">{{ Number::abbreviate($loanNotActive) }}</p>
+                            <p class="text-2xl font-bold text-green-500">{{ Number::abbreviate($loanNotActive) }}</p>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Total Peminjaman</p>
-                            <p class="text-2xl font-bold">{{ Number::abbreviate($loans->count()) }}</p>
+                            <p class="text-2xl font-bold text-red-500">{{ Number::abbreviate($loans->count()) }}</p>
                         </div>
                     </div>
                 </div>
@@ -61,15 +61,15 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Peminjaman Aktif</p>
-                            <p class="text-2xl font-bold">{{ Number::abbreviate($loanActive) }}</p>
+                            <p class="text-2xl font-bold text-yellow-500">{{ Number::abbreviate($loanActive) }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tabel Peminjaman Terbaru -->
+            <!-- Tabel Aktivitas Terbaru -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mt-6">
-                <h3 class="text-lg font-semibold">Peminjaman Terbaru</h3>
+                <h3 class="text-lg font-semibold">Aktivitas</h3>
                 <table class="min-w-full mt-4" id="tabelPeminjaman">
                     <thead>
                         <tr>
@@ -82,14 +82,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        $@foreach ($loans as $index => $loan)
+                        @foreach ($loans as $index => $loan)
                         <tr>
                             <td class="border px-4 py-2">{{ $index + 1 }}</td>
                             <td class="border px-4 py-2">{{ $loan->name }}</td>
                             <td class="border px-4 py-2">{{ $loan->book->title }}</td>
                             <td class="border px-4 py-2">{{ $loan->loan_date }}</td>
                             <td class="border px-4 py-2">{{ $loan->return_date }}</td>
-                            <td class="border px-4 py-2">{{ $loan->status }}</td>
+                            <td class="border px-4 py-2 {{ $loan->status == 'Dikembalikan' ? 'text-green-600' : 'text-yellow-600' }}">{{ $loan->status }}</td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -23,7 +23,12 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('peminjaman.buku')" :active="request()->routeIs('peminjaman.buku')">
-                        {{ __('Peminjaman Buku') }}
+                        {{ __('Manajemen Peminjaman Buku') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('pengembalian.buku')" :active="request()->routeIs('pengembalian.buku')">
+                        {{ __('Pengembalian Buku') }}
                     </x-nav-link>
                 </div>
             </div>

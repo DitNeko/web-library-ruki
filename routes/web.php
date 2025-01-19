@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +36,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'index' => 'peminjaman.buku',
         'create' => 'tambah.peminjaman',
         'store' => 'store.peminjaman',
+        'edit' => 'edit.peminjaman',
+        'update' => 'update.peminjaman',
+        'destroy' => 'delete.peminjaman'
     ]);
+    Route::get('/pengembalian', [ReturnController::class, 'index'])->name('pengembalian.buku');
+    Route::post('/pengembalian/kembalikan/{id}', [ReturnController::class, 'returnBook'])->name('kembalikan.buku');
 });
 
 Route::middleware('auth')->group(function () {

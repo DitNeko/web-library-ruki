@@ -13,8 +13,10 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = Loan::all();
-        return view('peminjaman-buku', compact('loans'));
+        $loans = Loan::where('status', 'Dipinjam')->get();
+        $statusDipinjam = Loan::where('status', 'Dipinjam')->count();
+        $booksAvailable = Book::sum('stock');
+        return view('peminjaman-buku', compact('loans', 'statusDipinjam', 'booksAvailable'));
     }
 
     /**
@@ -37,9 +39,8 @@ class LoanController extends Controller
                 'regex:/^[a-zA-Z\s\-\'\.]+$/',
             ],
             'book_id' => 'required',
-            'loan_date' => 'required',
-            'return_date' => 'required',
-            'status' => 'required'
+            'loan_date' => 'required|date',
+            'return_date' => 'required|date',
         ]);
 
         Loan::create([
@@ -47,7 +48,6 @@ class LoanController extends Controller
             'book_id' => $request->book_id,
             'loan_date' => $request->loan_date,
             'return_date' => $request->return_date,
-            'status' => $request->status
         ]);
 
         return redirect()->route('peminjaman.buku')->with('success', 'Berhasil menambahkan peminjaman');
@@ -66,7 +66,9 @@ class LoanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $books = Book::all();
+        $loan = Loan::findOrFail($id);
+        return view('edit-peminjaman', compact('books', 'loan'));
     }
 
     /**
@@ -74,7 +76,24 @@ class LoanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => [
+                'required',
+                'regex:/^[a-zA-Z\s\-\'\.]+$/',
+            ],
+            'book_id' => 'required',
+            'loan_date' => 'required|date',
+            'return_date' => 'required|date',
+        ]);
+
+        Loan::findOrFail($id)->update([
+            'name' => $request->name,
+            'book_id' => $request->book_id,
+            'loan_date' => $request->loan_date,
+            'return_date' => $request->return_date,
+        ]);
+
+        return redirect()->route('peminjaman.buku')->with('info', 'Data peminjaman berhasil di edit');
     }
 
     /**
@@ -82,6 +101,8 @@ class LoanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $loan = Loan::findOrFail($id);
+        $loan->delete();
+        return redirect()->back()->with('info', 'Peminjaman telah di Hapus');
     }
 }

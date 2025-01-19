@@ -1,15 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Peminjaman Buku') }}
+            {{ __('Edit Peminjaman Buku') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form action="{{ route('store.peminjaman') }}" method="POST" class="space-y-6">
+                <form action="{{ route('update.peminjaman', $loan->id) }}" method="POST" class="space-y-6">
                     @csrf
+                    @method('PUT')
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Nama Peminjam -->
                         <div>
@@ -21,6 +22,7 @@
                                    id="nama_peminjam" 
                                    class="w-full border rounded py-2 px-3" 
                                    placeholder="Masukkan nama peminjam"
+                                   value="{{ old('name', $loan->name) }}"
                                    required>
                         </div>
 
@@ -31,12 +33,12 @@
                             </label>
                             <select 
                                 name="book_id" 
-                                id="buku_id" 
+                                id="buku_id"
                                 class="w-full border rounded py-2 px-3" 
                                 required>
                                 <option value="">Pilih Buku</option>
                                 @foreach ($books as $index => $book)
-                                    <option value="{{ $book->id }}">{{ $book->title }}</option>
+                                    <option {{ $book->id == $loan->book_id ? 'selected' : ''}} value="{{ $book->id }}">{{ $book->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -52,7 +54,7 @@
                                    name="loan_date" 
                                    id="tanggal_peminjaman" 
                                    class="w-full border rounded py-2 px-3" 
-                                   value="{{ date('Y-m-d') }}" 
+                                   value="{{ old('loan_date', $loan->loan_date) }}" 
                                    required>
                         </div>
 
@@ -65,7 +67,7 @@
                                    name="return_date" 
                                    id="tanggal_pengembalian" 
                                    class="w-full border rounded py-2 px-3" 
-                                   value="{{ date('Y-m-d', strtotime('+14 days')) }}" 
+                                   value="{{ old('return_date', $loan->return_date) }}" 
                                    required>
                         </div>
                     </div>

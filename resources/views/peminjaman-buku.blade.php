@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Peminjaman Buku') }}
+            {{ __('Manajemen Peminjaman Buku') }}
         </h2>
     </x-slot>
 
@@ -44,7 +44,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Total Peminjaman</p>
-                            <p class="text-2xl font-bold">50</p>
+                            <p class="text-2xl font-bold text-blue-500">{{ Number::abbreviate($loans->count()) }}</p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Selesai</p>
-                            <p class="text-2xl font-bold">30</p>
+                            <p class="text-2xl font-bold text-green-500">30</p>
                         </div>
                     </div>
                 </div>
@@ -70,20 +70,20 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Sedang Dipinjam</p>
-                            <p class="text-2xl font-bold">20</p>
+                            <p class="text-2xl font-bold text-yellow-500">{{ Number::abbreviate($statusDipinjam) }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg p-4">
                     <div class="flex items-center">
                         <div class="mr-4">
-                            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Terlambat</p>
-                            <p class="text-2xl font-bold">5</p>
+                            <p class="text-sm text-gray-500">Buku Tersedia</p>
+                            <p class="text-2xl font-bold text-purple-500">{{ Number::abbreviate($booksAvailable) }}</p>
                         </div>
                     </div>
                 </div>
@@ -96,14 +96,6 @@
                         + Tambah Peminjaman
                     </a>
                 </div>
-                <div class="space-x-2">
-                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Export Excel
-                    </button>
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Export PDF
-                    </button>
-                </div>
             </div>
 
             <!-- Tabel Peminjaman (sesuai versi sebelumnya) -->
@@ -111,7 +103,6 @@
                 <table class="min-w-full" id="tabelPeminjaman">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left">No</th>
                             <th class="px-4 py-2 text-left">Nama Anggota</th>
                             <th class="px-4 py-2 text-left">Judul Buku</th>
                             <th class="px-4 py-2 text-left">Tanggal Peminjaman</th>
@@ -121,9 +112,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($loans as $index => $loan)
+                        @foreach ($loans as $loan)
                         <tr>
-                            <td class="border px-4 py-2">{{ $index + 1 }}</td>
                             <td class="border px-4 py-2">{{ $loan->name }}</td>
                             <td class="border px-4 py-2">{{ $loan->book->title }}</td>
                             <td class="border px-4 py-2">{{ $loan->loan_date }}</td>
@@ -133,55 +123,26 @@
                             </td>
                             <td class="border px-4 py-2">
                                 <div class="flex space-x-2">
-                                    <a href="#" class="text-blue-500 hover:text-blue-700">
+                                    <a href="{{ route('edit.peminjaman', $loan->id) }}" class="text-blue-500 hover:text-blue-700">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
                                     </a>
-                                    <a href="#" class="text-red-500 hover:text-red-700">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </a>
+                                    <form id="myForm" action="{{ route('delete.peminjaman', $loan->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 delete-btn" onclick="confirmSubmit(event)">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Filter dan Pencarian Lanjutan -->
-            <div class="mt-6 bg-white shadow-sm rounded-lg p-4">
-                <h3 class="text-lg font-semibold mb-4">Filter Lanjutan</h3>
-                <div class="grid grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Status Peminjaman</label>
-                        <select class="w-full border rounded py-2 px-3">
-                            <option>Semua Status</option>
-                            <option>Dipinjam</option>
-                            <option>Selesai</option>
-                            <option>Terlambat</option>
-                        </select>
-                     </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Nama Anggota</label>
-                        <input type="text" class="w-full border rounded py-2 px-3" placeholder="Cari Nama Anggota">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Judul Buku</label>
-                        <input type="text" class="w-full border rounded py-2 px-3" placeholder="Cari Judul Buku">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Peminjaman</label>
-                        <input type="date" class="w-full border rounded py-2 px-3">
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Terapkan Filter
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -194,6 +155,27 @@
     
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmSubmit(event) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('myForm').submit();
+                }
+            });
+        }
+    </script>
 
     <script>
         $(document).ready(function() {
